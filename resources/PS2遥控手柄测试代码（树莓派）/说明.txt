@@ -1,0 +1,7 @@
+
+	PS2_DAT          12   	 //MOSI
+	PS2_CMD          13   	 //MISO
+	PS2_SEL          6   	 //CS
+	PS2_CLK          14    	 //SCLK
+	VCC	            3.3V
+	GND	            GND
