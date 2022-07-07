@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "chrono": "cpp",
+        "pgmspace.h": "c",
+        "arduino.h": "c",
+        "pcm.h": "c",
+        "string": "cpp",
+        "thread": "cpp"
+    },
+    "git.ignoreLimitWarning": true
+}
