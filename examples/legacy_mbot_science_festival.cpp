@@ -23,16 +23,14 @@ MePS2 MePS2(PORT_5);
 
 bool is_flashing = false;
 
-#define FLASH_NOW_IF(ms, r, g, b)      \
-    if (now_time - start_time < ms)    \
-    {                                  \
-        rgbled_7.setColor(0, r, g, b); \
-        rgbled_7.show();               \
-        return;                        \
+#define FLASH_NOW_IF(ms, r, g, b)                                                                                      \
+    if (now_time - start_time < ms) {                                                                                  \
+        rgbled_7.setColor(0, r, g, b);                                                                                 \
+        rgbled_7.show();                                                                                               \
+        return;                                                                                                        \
     }
 
-void flash_rainbow_lights(unsigned long start_time, unsigned long now_time)
-{
+void flash_rainbow_lights(unsigned long start_time, unsigned long now_time) {
     FLASH_NOW_IF(200, 255, 0, 0)
     FLASH_NOW_IF(400, 255, 127, 0)
     FLASH_NOW_IF(600, 255, 255, 0)
@@ -44,33 +42,28 @@ void flash_rainbow_lights(unsigned long start_time, unsigned long now_time)
     is_flashing = (now_time - start_time <= 1600);
 }
 
-void _loop()
-{
+void _loop() {
     MePS2.loop();
 }
 
-void setup()
-{
+void setup() {
     MePS2.begin(115200);
     rgbled_7.fillPixelsBak(0, 2, 1);
-    while (1)
-    {
+    while (1) {
         unsigned long start_time = 0;
         unsigned long now_time = 0;
 
         motor_9.run(-1 * (MePS2.MeAnalog(2) + MePS2.MeAnalog(4)) / 100.0 * 255);
         motor_10.run((MePS2.MeAnalog(4) - MePS2.MeAnalog(2)) / 100.0 * 255);
 
-        if (MePS2.ButtonPressed(11))
-        {
+        if (MePS2.ButtonPressed(11)) {
             is_flashing = true;
             start_time = millis();
             now_time = millis();
             flash_rainbow_lights(start_time, now_time);
         }
 
-        if (is_flashing)
-        {
+        if (is_flashing) {
             now_time = millis();
             flash_rainbow_lights(start_time, now_time);
         }
@@ -78,8 +71,7 @@ void setup()
     }
 }
 
-void loop()
-{
+void loop() {
     _loop();
 }
 

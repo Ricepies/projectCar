@@ -6,8 +6,7 @@
  * @class Motor
  * @brief Simple dual-pin H-Bridge DC motor controller with PWM speed control.
  */
-class Motor
-{
+class Motor {
 private:
     uint8_t pinA;
     uint8_t pinB;

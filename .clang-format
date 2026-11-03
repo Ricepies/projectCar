@@ -1,0 +1,20 @@
+---
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 120
+AccessModifierOffset: -4
+
+# Attach left brace directly trailing right bracket / declaration
+BreakBeforeBraces: Attach
+
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+IndentCaseLabels: true
+SortIncludes: false
+SpaceAfterCStyleCast: false
+SpacesBeforeTrailingComments: 1
