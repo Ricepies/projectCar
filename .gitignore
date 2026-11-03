@@ -3,6 +3,9 @@
 .pioenvs/
 .piolibdeps/
 
+# Local Arduino core & third-party libraries (for IntelliSense)
+lib/
+
 # Editor / IDE configuration
 .vscode/*
 !.vscode/settings.json
