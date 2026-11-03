@@ -17,18 +17,20 @@ uint8_t Gamepad::ReadData(uint8_t command) {
     uint8_t j = 1;
 
     for (int i = 0; i < 8; i++) {
-        if (command & 0x01)
+        if (command & 0x01) {
             digitalWrite(MISO, HIGH);
-        else
+        } else {
             digitalWrite(MISO, LOW);
+        }
 
         command >>= 1;
         delayMicroseconds(10);
         digitalWrite(SCK, LOW);
         delayMicroseconds(10);
 
-        if (digitalRead(MOSI) == HIGH)
+        if (digitalRead(MOSI) == HIGH) {
             res += j;
+        }
 
         j <<= 1;
         digitalWrite(SCK, HIGH);

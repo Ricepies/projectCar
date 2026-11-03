@@ -9,6 +9,8 @@ AccessModifierOffset: -4
 # Attach left brace directly trailing right bracket / declaration
 BreakBeforeBraces: Attach
 
+# Enforce curly braces around all single-line control statements
+InsertBraces: true
 AllowShortBlocksOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: Never

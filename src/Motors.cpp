@@ -12,10 +12,11 @@ void Motor::run(int16_t speed) {
         return;
     }
 
-    if (speed > 100)
+    if (speed > 100) {
         speed = 100;
-    else if (speed < -100)
+    } else if (speed < -100) {
         speed = -100;
+    }
 
     // Map speed (1..100) to PWM duty cycle (approx 42..240)
     int pwmVal = abs(speed) * 2 + 40;
