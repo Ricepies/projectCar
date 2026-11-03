@@ -1,5 +1,7 @@
 # ProjectCar (Raspberry Pi Pico 4WD Robot Car)
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
+
 An embedded C++ firmware for a 4-wheel-drive (4WD) robotic car powered by the **Raspberry Pi Pico (RP2040)** and controlled wirelessly via a **PS2 Gamepad**.
 
 ---
@@ -103,3 +105,10 @@ pio run -e pico --target upload
 1. Open the `projectCar` folder in VS Code.
 2. Ensure the **PlatformIO IDE** extension is installed.
 3. Click the **Build** (✓) or **Upload** (→) icon in the PlatformIO status bar.
+
+---
+
+## 📄 License
+
+This project is licensed under the terms of the [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE).
+
