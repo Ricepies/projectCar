@@ -22,6 +22,10 @@ constexpr AxisLut kAxisLut{};
 
 } // namespace
 
+// =============================================================================
+// Constructor & Initialization
+// =============================================================================
+
 Gamepad::Gamepad(u8 MOSIpin, u8 MISOpin, u8 CSpin, u8 SCKpin) : MOSI(MOSIpin), MISO(MISOpin), CS(CSpin), SCK(SCKpin) {
     pinMode(MISO, OUTPUT);
     pinMode(SCK, OUTPUT);
@@ -32,6 +36,10 @@ Gamepad::Gamepad(u8 MOSIpin, u8 MISOpin, u8 CSpin, u8 SCKpin) : MOSI(MOSIpin), M
     digitalWrite(CS, HIGH);
     digitalWrite(MISO, HIGH);
 }
+
+// =============================================================================
+// SPI Communication & Polling
+// =============================================================================
 
 u8 Gamepad::transferByte(u8 cmd) const {
     u8 in = 0;
@@ -79,6 +87,56 @@ void Gamepad::ScanForInput() {
     digitalWrite(CS, HIGH);
 }
 
+void Gamepad::scanForInput() {
+    ScanForInput();
+}
+
+// =============================================================================
+// Joystick Data Accessors
+// =============================================================================
+
+i16 Gamepad::joystickData(GamepadAxis axis) const {
+    return joystickData(static_cast<u8>(axis));
+}
+
+i16 Gamepad::joystickData(u8 axis) const {
+    const u8 idx = static_cast<u8>(axis - RX);
+    return (idx < 4) ? static_cast<i16>(axes[idx]) : 0;
+}
+
+i16 Gamepad::getLX() const {
+    return axes[2];
+}
+
+i16 Gamepad::getLY() const {
+    return axes[3];
+}
+
+i16 Gamepad::getRX() const {
+    return axes[0];
+}
+
+i16 Gamepad::getRY() const {
+    return axes[1];
+}
+
+// =============================================================================
+// Button State Accessors
+// =============================================================================
+
+bool Gamepad::isButtonDown(GamepadButton button) const {
+    return isButtonDown(static_cast<u8>(button));
+}
+
+bool Gamepad::isButtonDown(u8 button) const {
+    const u8 idx = static_cast<u8>(button - 1);
+    return (idx < 16) && (((buttonsDown >> idx) & 1U) != 0);
+}
+
+bool Gamepad::buttonPressed(GamepadButton button) {
+    return buttonPressed(static_cast<u8>(button));
+}
+
 bool Gamepad::buttonPressed(u8 button) {
     const u8 idx = static_cast<u8>(button - 1);
     if (idx >= 16 || ((buttonsDown >> idx) & 1U) == 0) {
@@ -91,4 +149,12 @@ bool Gamepad::buttonPressed(u8 button) {
         return true;
     }
     return false;
+}
+
+// =============================================================================
+// Controller Mode Accessor
+// =============================================================================
+
+u8 Gamepad::getControllerMode() const {
+    return controllerMode;
 }

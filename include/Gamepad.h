@@ -64,43 +64,33 @@ public:
      *        - Bytes 5-8: Direct reading and LUT normalization of analog joysticks
      */
     void ScanForInput();
-
-    inline void scanForInput() { ScanForInput(); }
+    void scanForInput();
 
     /**
      * @brief Returns pre-calculated joystick value in the range [-100, +100].
      * @param axis Target joystick channel (LX, LY, RX, RY).
      */
-    inline i16 joystickData(u8 axis) const {
-        const u8 idx = static_cast<u8>(axis - RX);
-        return (idx < 4) ? static_cast<i16>(axes[idx]) : 0;
-    }
+    i16 joystickData(GamepadAxis axis) const;
+    i16 joystickData(u8 axis) const;
 
-    inline i16 joystickData(GamepadAxis axis) const { return joystickData(static_cast<u8>(axis)); }
+    // Direct O(1) accessors for normalized axes (-100 to +100)
+    i16 getLX() const;
+    i16 getLY() const;
+    i16 getRX() const;
+    i16 getRY() const;
 
     /**
      * @brief Checks instantaneous button state (true = down, false = released).
      */
-    inline bool isButtonDown(u8 button) const {
-        const u8 idx = static_cast<u8>(button - 1);
-        return (idx < 16) && (((buttonsDown >> idx) & 1U) != 0);
-    }
-
-    inline bool isButtonDown(GamepadButton button) const { return isButtonDown(static_cast<u8>(button)); }
+    bool isButtonDown(GamepadButton button) const;
+    bool isButtonDown(u8 button) const;
 
     /**
      * @brief Checks if a button is pressed with non-blocking 200ms debounce.
      */
+    bool buttonPressed(GamepadButton button);
     bool buttonPressed(u8 button);
 
-    inline bool buttonPressed(GamepadButton button) { return buttonPressed(static_cast<u8>(button)); }
-
-    // Direct O(1) accessors for normalized axes (-100 to +100)
-    inline i16 getRX() const { return axes[0]; }
-    inline i16 getRY() const { return axes[1]; }
-    inline i16 getLX() const { return axes[2]; }
-    inline i16 getLY() const { return axes[3]; }
-
     // Direct accessor for controller mode
-    inline u8 getControllerMode() const { return controllerMode; }
+    u8 getControllerMode() const;
 };
