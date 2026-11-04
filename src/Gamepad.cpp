@@ -64,12 +64,20 @@ void Gamepad::ScanForInput() {
     }
 }
 
+int16_t Gamepad::joystickData(GamepadAxis axis) {
+    return joystickData(static_cast<uint8_t>(axis));
+}
+
 int16_t Gamepad::joystickData(uint8_t axis) {
     uint8_t data = Data[axis];
     if (axis == LX || axis == RX) {
         return (static_cast<int>(data) - 128) * 100 / 127;
     }
     return (255 - static_cast<int>(data) - 128) * 100 / 127;
+}
+
+bool Gamepad::buttonPressed(GamepadButton button) {
+    return buttonPressed(static_cast<uint8_t>(button));
 }
 
 bool Gamepad::buttonPressed(uint8_t button) {

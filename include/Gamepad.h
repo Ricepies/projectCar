@@ -3,28 +3,27 @@
 #include <Arduino.h>
 
 // PS2 Gamepad Button Indices
-#define buttonSelect 1
-#define buttonL3 2
-#define buttonR3 3
-#define buttonStart 4
-#define buttonUp 5
-#define buttonRight 6
-#define buttonDown 7
-#define buttonLeft 8
-#define buttonL2 9
-#define buttonR2 10
-#define buttonL1 11
-#define buttonR1 12
-#define buttonTriangle 13
-#define buttonCircle 14
-#define buttonX 15
-#define buttonSquare 16
+enum GamepadButton : uint8_t {
+    buttonSelect = 1,
+    buttonL3 = 2,
+    buttonR3 = 3,
+    buttonStart = 4,
+    buttonUp = 5,
+    buttonRight = 6,
+    buttonDown = 7,
+    buttonLeft = 8,
+    buttonL2 = 9,
+    buttonR2 = 10,
+    buttonL1 = 11,
+    buttonR1 = 12,
+    buttonTriangle = 13,
+    buttonCircle = 14,
+    buttonX = 15,
+    buttonSquare = 16
+};
 
 // PS2 Joystick Analog Channel Indices
-#define RX 5
-#define RY 6
-#define LX 7
-#define LY 8
+enum GamepadAxis : uint8_t { RX = 5, RY = 6, LX = 7, LY = 8 };
 
 /**
  * @class Gamepad
@@ -54,6 +53,8 @@ private:
 public:
     Gamepad(uint8_t MOSIpin, uint8_t MISOpin, uint8_t CSpin, uint8_t SCKpin);
     void ScanForInput();
+    int16_t joystickData(GamepadAxis axis);
     int16_t joystickData(uint8_t axis);
+    bool buttonPressed(GamepadButton button);
     bool buttonPressed(uint8_t button);
 };
