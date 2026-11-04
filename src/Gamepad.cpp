@@ -15,7 +15,7 @@ u8 Gamepad::ReadData(u8 command) {
     u8 res = 0;
     u8 j = 1;
 
-    for (int i = 0; i < 8; i++) {
+    for (u8 i = 0; i < 8; i++) {
         if (command & 0x01) {
             digitalWrite(MISO, HIGH);
         } else {
@@ -50,14 +50,14 @@ void Gamepad::ScanForInput() {
     ClearData();
 
     digitalWrite(CS, LOW);
-    for (int i = 0; i < 9; i++) {
+    for (u8 i = 0; i < 9; i++) {
         Data[i] = ReadData(scan[i]);
     }
     digitalWrite(CS, HIGH);
 
     Handkey = (static_cast<u16>(Data[4]) << 8) | Data[3];
-    for (int index = 0; index < 16; index++) {
-        if ((Handkey & (1 << (MASK[index] - 1))) == 0) {
+    for (u8 index = 0; index < 16; index++) {
+        if ((Handkey & (1U << (MASK[index] - 1))) == 0) {
             dynamicButtonStatus[index + 1] = true;
         }
     }
@@ -70,9 +70,9 @@ i16 Gamepad::joystickData(GamepadAxis axis) {
 i16 Gamepad::joystickData(u8 axis) {
     u8 data = Data[axis];
     if (axis == LX || axis == RX) {
-        return (static_cast<int>(data) - 128) * 100 / 127;
+        return (static_cast<i16>(data) - 128) * 100 / 127;
     }
-    return (255 - static_cast<int>(data) - 128) * 100 / 127;
+    return (255 - static_cast<i16>(data) - 128) * 100 / 127;
 }
 
 bool Gamepad::buttonPressed(GamepadButton button) {

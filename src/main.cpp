@@ -37,7 +37,7 @@ Gamepad gamepad(12, 13, 14, 15);
 // System State
 bool motorStarted = false;
 
-void beep(unsigned int durationMs = 80, unsigned int frequencyHz = 1500) {
+void beep(u16 durationMs = 80, u16 frequencyHz = 1500) {
     tone(BUZZER_PIN, frequencyHz, durationMs);
     delay(durationMs);
     noTone(BUZZER_PIN);

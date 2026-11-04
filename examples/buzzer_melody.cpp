@@ -4,29 +4,30 @@
  */
 
 #include <Arduino.h>
-#include <string>
 #include <cmath>
+#include <string>
+#include "Types.h"
 
 using namespace std;
 
-const int speakerPin = 16; // Pico buzzer pin (GP16)
+const u8 speakerPin = 16; // Pico buzzer pin (GP16)
 
 /**
  * Base note frequencies:
  *     A          B         C         D         E        F         G
  * {27.50000, 30.86771, 16.35160, 18.35405, 20.60172, 21.82676, 24.49971}
  */
-const float frequencies[] = {27.50000, 30.86771, 16.35160, 18.35405, 20.60172, 21.82676, 24.49971};
+const f32 frequencies[] = {27.50000f, 30.86771f, 16.35160f, 18.35405f, 20.60172f, 21.82676f, 24.49971f};
 
 const string score =
     "G A B C5 B C5 G A A G F E E E F D G A B C5 B C5 G A A A B C5 C5 C5 C5 D5 D5 D5 - "
     "G A B C5 B C5 E5 A5 A5 G5 F5 E5 E5 E5 E5 D5 D5 A B C5 C5 C5 C5 D5 C5 C5 B C5 D5 D5 D5 D5 C5 B C5 C5 C5 C5";
 
-void playMelody(const string &noteNames, int tempo = 120) {
-    int noteDuration = 60000 / tempo;
+void playMelody(const string &noteNames, u16 tempo = 120) {
+    u16 noteDuration = 60000 / tempo;
     string notes = noteNames + "\0";
 
-    for (size_t i = 0; i < notes.length(); i += 2) {
+    for (usize i = 0; i < notes.length(); i += 2) {
         digitalWrite(speakerPin, LOW);
         if (notes[i] == '-') {
             digitalWrite(speakerPin, LOW);

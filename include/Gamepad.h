@@ -37,9 +37,9 @@ private:
     u8 CS;
     u8 SCK;
 
-    const u16 MASK[16] = {buttonSelect,   buttonL3,     buttonR3, buttonStart, buttonUp, buttonRight,
-                          buttonDown,     buttonLeft,   buttonL2, buttonR2,    buttonL1, buttonR1,
-                          buttonTriangle, buttonCircle, buttonX,  buttonSquare};
+    const u8 MASK[16] = {buttonSelect,   buttonL3,     buttonR3, buttonStart, buttonUp, buttonRight,
+                         buttonDown,     buttonLeft,   buttonL2, buttonR2,    buttonL1, buttonR1,
+                         buttonTriangle, buttonCircle, buttonX,  buttonSquare};
 
     u16 Handkey = 0;
     u8 scan[9] = {0x01, 0x42, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};

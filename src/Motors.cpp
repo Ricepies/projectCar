@@ -19,7 +19,7 @@ void Motor::run(i16 speed) {
     }
 
     // Map speed (1..100) to PWM duty cycle (approx 42..240)
-    int pwmVal = abs(speed) * 2 + 40;
+    u8 pwmVal = static_cast<u8>(abs(speed) * 2 + 40);
 
     if (speed > 0) {
         analogWrite(pinB, 0);
