@@ -29,7 +29,7 @@ enum GamepadAxis : u8 { RX = 5, RY = 6, LX = 7, LY = 8 };
 /**
  * @class Gamepad
  * @brief High-performance bit-banged SPI driver for wireless/wired PS2 Gamepad controllers.
- *        Features compile-time LUT axis normalization, zero-branch O(1) axis/button queries,
+ *        Features direct axis normalization, zero-branch O(1) axis/button queries,
  *        and bitmask-based active-LOW button decoding.
  */
 class Gamepad {
@@ -61,7 +61,7 @@ public:
      * @brief Polls the PS2 controller through a 9-byte SPI exchange:
      *        - Bytes 0-2: Handshake & mode detection
      *        - Bytes 3-4: Button state acquisition & active-LOW inversion
-     *        - Bytes 5-8: Direct reading and LUT normalization of analog joysticks
+     *        - Bytes 5-8: Direct reading and normalization of analog joysticks
      */
     void ScanForInput();
     void scanForInput();
@@ -72,12 +72,6 @@ public:
      */
     i16 joystickData(GamepadAxis axis) const;
     i16 joystickData(u8 axis) const;
-
-    // Direct O(1) accessors for normalized axes (-100 to +100)
-    i16 getLX() const;
-    i16 getLY() const;
-    i16 getRX() const;
-    i16 getRY() const;
 
     /**
      * @brief Checks instantaneous button state (true = down, false = released).

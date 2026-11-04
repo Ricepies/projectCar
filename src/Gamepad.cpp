@@ -6,25 +6,13 @@ constexpr u8 kStartCmd = 0x01;
 constexpr u8 kPollCmd = 0x42;
 constexpr u32 kDebounceMs = 200;
 
-// Compile-time lookup table mapping raw 0..255 axis bytes to centered -100..+100.
-// Avoids runtime multiplication and division during SPI polling.
-struct AxisLut {
-    i8 table[256];
-
-    constexpr AxisLut() : table{} {
-        for (i32 i = 0; i < 256; ++i) {
-            table[i] = static_cast<i8>((i - 128) * 100 / 127);
-        }
-    }
-};
-
-constexpr AxisLut kAxisLut{};
+// Dynamic axis normalization: maps raw 0..255 byte to centered -100..+100.
+inline i8 normalizeAxis(u8 val, bool invert = false) {
+    const i16 raw = invert ? static_cast<i16>(255U - val) : static_cast<i16>(val);
+    return static_cast<i8>((raw - 128) * 100 / 127);
+}
 
 } // namespace
-
-// =============================================================================
-// Constructor & Initialization
-// =============================================================================
 
 Gamepad::Gamepad(u8 MOSIpin, u8 MISOpin, u8 CSpin, u8 SCKpin) : MOSI(MOSIpin), MISO(MISOpin), CS(CSpin), SCK(SCKpin) {
     pinMode(MISO, OUTPUT);
@@ -36,10 +24,6 @@ Gamepad::Gamepad(u8 MOSIpin, u8 MISOpin, u8 CSpin, u8 SCKpin) : MOSI(MOSIpin), M
     digitalWrite(CS, HIGH);
     digitalWrite(MISO, HIGH);
 }
-
-// =============================================================================
-// SPI Communication & Polling
-// =============================================================================
 
 u8 Gamepad::transferByte(u8 cmd) const {
     u8 in = 0;
@@ -79,10 +63,10 @@ void Gamepad::ScanForInput() {
     buttonsDown = static_cast<u16>(~(static_cast<u16>(btnLow) | (static_cast<u16>(btnHigh) << 8)));
 
     // Bytes 5-8: Analog sticks (RX, RY, LX, LY). Y axes are inverted so forward is +100.
-    axes[0] = kAxisLut.table[transferByte(0x00)];
-    axes[1] = kAxisLut.table[static_cast<u8>(255U - transferByte(0x00))];
-    axes[2] = kAxisLut.table[transferByte(0x00)];
-    axes[3] = kAxisLut.table[static_cast<u8>(255U - transferByte(0x00))];
+    axes[0] = normalizeAxis(transferByte(0x00), false);
+    axes[1] = normalizeAxis(transferByte(0x00), true);
+    axes[2] = normalizeAxis(transferByte(0x00), false);
+    axes[3] = normalizeAxis(transferByte(0x00), true);
 
     digitalWrite(CS, HIGH);
 }
@@ -90,10 +74,6 @@ void Gamepad::ScanForInput() {
 void Gamepad::scanForInput() {
     ScanForInput();
 }
-
-// =============================================================================
-// Joystick Data Accessors
-// =============================================================================
 
 i16 Gamepad::joystickData(GamepadAxis axis) const {
     return joystickData(static_cast<u8>(axis));
@@ -103,26 +83,6 @@ i16 Gamepad::joystickData(u8 axis) const {
     const u8 idx = static_cast<u8>(axis - RX);
     return (idx < 4) ? static_cast<i16>(axes[idx]) : 0;
 }
-
-i16 Gamepad::getLX() const {
-    return axes[2];
-}
-
-i16 Gamepad::getLY() const {
-    return axes[3];
-}
-
-i16 Gamepad::getRX() const {
-    return axes[0];
-}
-
-i16 Gamepad::getRY() const {
-    return axes[1];
-}
-
-// =============================================================================
-// Button State Accessors
-// =============================================================================
 
 bool Gamepad::isButtonDown(GamepadButton button) const {
     return isButtonDown(static_cast<u8>(button));
@@ -150,10 +110,6 @@ bool Gamepad::buttonPressed(u8 button) {
     }
     return false;
 }
-
-// =============================================================================
-// Controller Mode Accessor
-// =============================================================================
 
 u8 Gamepad::getControllerMode() const {
     return controllerMode;
