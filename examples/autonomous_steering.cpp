@@ -4,6 +4,7 @@
  */
 
 #include <Arduino.h>
+#include "Types.h"
 #include "Motors.h"
 
 // 4WD Motors (Front-Left, Front-Right, Rear-Left, Rear-Right)
@@ -12,9 +13,9 @@ Motor motorFR(2, 3);
 Motor motorRL(6, 7);
 Motor motorRR(4, 5);
 
-enum Direction { DIR_LEFT = 1, DIR_RIGHT = 2, DIR_FORWARD = 3, DIR_BACKWARD = 4 };
+enum Direction : u8 { DIR_LEFT = 1, DIR_RIGHT = 2, DIR_FORWARD = 3, DIR_BACKWARD = 4 };
 
-void move(Direction direction, int speed) {
+void move(Direction direction, i16 speed) {
     switch (direction) {
         case DIR_FORWARD:
             motorFL.run(speed);
@@ -37,7 +38,7 @@ void move(Direction direction, int speed) {
     }
 }
 
-void turn(Direction direction, int speed) {
+void turn(Direction direction, i16 speed) {
     switch (direction) {
         case DIR_LEFT:
             motorFL.run(-speed);

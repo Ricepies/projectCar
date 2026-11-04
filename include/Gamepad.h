@@ -1,9 +1,10 @@
 #pragma once
 
 #include <Arduino.h>
+#include "Types.h"
 
 // PS2 Gamepad Button Indices
-enum GamepadButton : uint8_t {
+enum GamepadButton : u8 {
     buttonSelect = 1,
     buttonL3 = 2,
     buttonR3 = 3,
@@ -23,7 +24,7 @@ enum GamepadButton : uint8_t {
 };
 
 // PS2 Joystick Analog Channel Indices
-enum GamepadAxis : uint8_t { RX = 5, RY = 6, LX = 7, LY = 8 };
+enum GamepadAxis : u8 { RX = 5, RY = 6, LX = 7, LY = 8 };
 
 /**
  * @class Gamepad
@@ -31,30 +32,30 @@ enum GamepadAxis : uint8_t { RX = 5, RY = 6, LX = 7, LY = 8 };
  */
 class Gamepad {
 private:
-    uint8_t MOSI;
-    uint8_t MISO;
-    uint8_t CS;
-    uint8_t SCK;
+    u8 MOSI;
+    u8 MISO;
+    u8 CS;
+    u8 SCK;
 
-    const uint16_t MASK[16] = {buttonSelect,   buttonL3,     buttonR3, buttonStart, buttonUp, buttonRight,
-                               buttonDown,     buttonLeft,   buttonL2, buttonR2,    buttonL1, buttonR1,
-                               buttonTriangle, buttonCircle, buttonX,  buttonSquare};
+    const u16 MASK[16] = {buttonSelect,   buttonL3,     buttonR3, buttonStart, buttonUp, buttonRight,
+                          buttonDown,     buttonLeft,   buttonL2, buttonR2,    buttonL1, buttonR1,
+                          buttonTriangle, buttonCircle, buttonX,  buttonSquare};
 
-    uint16_t Handkey = 0;
-    uint8_t scan[9] = {0x01, 0x42, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-    uint8_t Data[9] = {0};
+    u16 Handkey = 0;
+    u8 scan[9] = {0x01, 0x42, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    u8 Data[9] = {0};
 
-    uint32_t lastPressed[19] = {0};
+    u32 lastPressed[19] = {0};
     bool dynamicButtonStatus[19] = {false};
 
-    uint8_t ReadData(uint8_t command);
+    u8 ReadData(u8 command);
     void ClearData();
 
 public:
-    Gamepad(uint8_t MOSIpin, uint8_t MISOpin, uint8_t CSpin, uint8_t SCKpin);
+    Gamepad(u8 MOSIpin, u8 MISOpin, u8 CSpin, u8 SCKpin);
     void ScanForInput();
-    int16_t joystickData(GamepadAxis axis);
-    int16_t joystickData(uint8_t axis);
+    i16 joystickData(GamepadAxis axis);
+    i16 joystickData(u8 axis);
     bool buttonPressed(GamepadButton button);
-    bool buttonPressed(uint8_t button);
+    bool buttonPressed(u8 button);
 };

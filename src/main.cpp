@@ -18,11 +18,12 @@
  */
 
 #include <Arduino.h>
+#include "Types.h"
 #include "Motors.h"
 #include "Gamepad.h"
 
 // Hardware Pin Definitions
-constexpr uint8_t BUZZER_PIN = 16;
+constexpr u8 BUZZER_PIN = 16;
 
 // 4WD Motors
 Motor motorFL(0, 1);
@@ -42,7 +43,7 @@ void beep(unsigned int durationMs = 80, unsigned int frequencyHz = 1500) {
     noTone(BUZZER_PIN);
 }
 
-void setAllMotors(int16_t fl, int16_t fr, int16_t rl, int16_t rr) {
+void setAllMotors(i16 fl, i16 fr, i16 rl, i16 rr) {
     motorFL.run(fl);
     motorFR.run(fr);
     motorRL.run(rl);
@@ -85,10 +86,10 @@ void loop() {
     }
 
     if (motorStarted) {
-        int16_t lx = gamepad.joystickData(LX);
-        int16_t ly = gamepad.joystickData(LY);
-        int16_t rx = gamepad.joystickData(RX);
-        int16_t ry = gamepad.joystickData(RY);
+        i16 lx = gamepad.joystickData(LX);
+        i16 ly = gamepad.joystickData(LY);
+        i16 rx = gamepad.joystickData(RX);
+        i16 ry = gamepad.joystickData(RY);
 
         // Primary drive control via Left Stick, fallback to Right Stick
         if (abs(lx) > 5 || abs(ly) > 5) {

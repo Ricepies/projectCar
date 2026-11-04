@@ -1,12 +1,12 @@
 #include "Motors.h"
 
-Motor::Motor(uint8_t pin1, uint8_t pin2) : pinA(pin1), pinB(pin2) {
+Motor::Motor(u8 pin1, u8 pin2) : pinA(pin1), pinB(pin2) {
     pinMode(pinA, OUTPUT);
     pinMode(pinB, OUTPUT);
     stop();
 }
 
-void Motor::run(int16_t speed) {
+void Motor::run(i16 speed) {
     if (speed == 0) {
         stop();
         return;

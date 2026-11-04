@@ -52,7 +52,8 @@ projectCar/
 │
 ├── include/                        # Header declarations (.h)
 │   ├── Gamepad.h                   # PS2 controller driver interface
-│   └── Motors.h                    # Motor driver interface
+│   ├── Motors.h                    # Motor driver interface
+│   └── Types.h                     # Rust/LLVM fixed-width type aliases (i8, u8, i16, etc.)
 │
 ├── src/                            # Firmware implementation (.cpp)
 │   ├── Gamepad.cpp                 # PS2 SPI protocol implementation

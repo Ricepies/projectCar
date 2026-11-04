@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include "Types.h"
 
 /**
  * @class Motor
@@ -8,8 +9,8 @@
  */
 class Motor {
 private:
-    uint8_t pinA;
-    uint8_t pinB;
+    u8 pinA;
+    u8 pinB;
 
 public:
     /**
@@ -17,13 +18,13 @@ public:
      * @param pin1 Forward PWM pin
      * @param pin2 Reverse PWM pin
      */
-    Motor(uint8_t pin1, uint8_t pin2);
+    Motor(u8 pin1, u8 pin2);
 
     /**
      * @brief Set motor speed and direction.
      * @param speed Speed from -100 (full reverse) to 100 (full forward). 0 stops motor.
      */
-    void run(int16_t speed);
+    void run(i16 speed);
 
     /**
      * @brief Immediately stop the motor by driving both pins LOW.
