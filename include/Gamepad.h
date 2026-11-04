@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Arduino.h>
-#include <stdint.h>
+#include "Types.h"
 
 // PS2 Gamepad Button Indices
-enum GamepadButton : uint8_t {
+enum GamepadButton : u8 {
     buttonSelect = 1,
     buttonL3 = 2,
     buttonR3 = 3,
@@ -24,7 +24,7 @@ enum GamepadButton : uint8_t {
 };
 
 // PS2 Joystick Analog Channel Indices
-enum GamepadAxis : uint8_t { RX = 5, RY = 6, LX = 7, LY = 8 };
+enum GamepadAxis : u8 { RX = 5, RY = 6, LX = 7, LY = 8 };
 
 /**
  * @class Gamepad
@@ -34,31 +34,31 @@ enum GamepadAxis : uint8_t { RX = 5, RY = 6, LX = 7, LY = 8 };
  */
 class Gamepad {
 private:
-    uint8_t MOSI;
-    uint8_t MISO;
-    uint8_t CS;
-    uint8_t SCK;
+    u8 MOSI;
+    u8 MISO;
+    u8 CS;
+    u8 SCK;
 
     // Active-HIGH 16-bit bitfield of currently pressed buttons (bit 0 = button 1, etc.)
-    uint16_t buttonsDown = 0;
+    u16 buttonsDown = 0;
 
     // Pre-normalized joystick values (-100 to +100)
-    int16_t rx = 0;
-    int16_t ry = 0;
-    int16_t lx = 0;
-    int16_t ly = 0;
+    i16 rx = 0;
+    i16 ry = 0;
+    i16 lx = 0;
+    i16 ly = 0;
 
     // Receiver controller ID (0x73 = Analog Red Mode, 0x41 = Digital Mode)
-    uint8_t controllerMode = 0;
+    u8 controllerMode = 0;
 
     // Non-blocking debounce timestamps per button (1-indexed, 1..16)
-    uint32_t lastPressed[17] = {0};
+    u32 lastPressed[17] = {0};
 
     // Full-duplex bit-banged SPI byte transfer (LSB first, Mode 3)
-    uint8_t transferByte(uint8_t cmd);
+    u8 transferByte(u8 cmd);
 
 public:
-    Gamepad(uint8_t MOSIpin, uint8_t MISOpin, uint8_t CSpin, uint8_t SCKpin);
+    Gamepad(u8 MOSIpin, u8 MISOpin, u8 CSpin, u8 SCKpin);
 
     /**
      * @brief Polls the PS2 controller through a single 9-byte SPI exchange:
@@ -74,27 +74,27 @@ public:
      * @brief Returns pre-calculated joystick value in the range [-100, +100].
      * @param axis Target joystick channel (LX, LY, RX, RY).
      */
-    int16_t joystickData(GamepadAxis axis) const;
-    int16_t joystickData(uint8_t axis) const;
+    i16 joystickData(GamepadAxis axis) const;
+    i16 joystickData(u8 axis) const;
 
     /**
      * @brief Checks instantaneous button state (true = down, false = released).
      */
     bool isButtonDown(GamepadButton button) const;
-    bool isButtonDown(uint8_t button) const;
+    bool isButtonDown(u8 button) const;
 
     /**
      * @brief Checks if a button is pressed with non-blocking 200ms debounce.
      */
     bool buttonPressed(GamepadButton button);
-    bool buttonPressed(uint8_t button);
+    bool buttonPressed(u8 button);
 
     // Direct accessors for normalized axes (-100 to +100)
-    inline int16_t getLX() const { return lx; }
-    inline int16_t getLY() const { return ly; }
-    inline int16_t getRX() const { return rx; }
-    inline int16_t getRY() const { return ry; }
+    inline i16 getLX() const { return lx; }
+    inline i16 getLY() const { return ly; }
+    inline i16 getRX() const { return rx; }
+    inline i16 getRY() const { return ry; }
 
     // Direct accessor for controller mode
-    inline uint8_t getControllerMode() const { return controllerMode; }
+    inline u8 getControllerMode() const { return controllerMode; }
 };

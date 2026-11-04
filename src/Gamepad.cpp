@@ -1,9 +1,9 @@
 #include "Gamepad.h"
 
 // Helper: normalizes raw 0..255 byte to centered -100..+100 range
-static inline int16_t normalizeAxis(uint8_t val, bool invert = false) {
-    int16_t raw = invert ? (255 - static_cast<int16_t>(val)) : static_cast<int16_t>(val);
-    int16_t scaled = (raw - 128) * 100 / 127;
+static inline i16 normalizeAxis(u8 val, bool invert = false) {
+    i16 raw = invert ? (255 - static_cast<i16>(val)) : static_cast<i16>(val);
+    i16 scaled = (raw - 128) * 100 / 127;
     if (scaled > 100) {
         return 100;
     }
@@ -13,8 +13,7 @@ static inline int16_t normalizeAxis(uint8_t val, bool invert = false) {
     return scaled;
 }
 
-Gamepad::Gamepad(uint8_t MOSIpin, uint8_t MISOpin, uint8_t CSpin, uint8_t SCKpin)
-    : MOSI(MOSIpin), MISO(MISOpin), CS(CSpin), SCK(SCKpin) {
+Gamepad::Gamepad(u8 MOSIpin, u8 MISOpin, u8 CSpin, u8 SCKpin) : MOSI(MOSIpin), MISO(MISOpin), CS(CSpin), SCK(SCKpin) {
     pinMode(MISO, OUTPUT);
     pinMode(SCK, OUTPUT);
     pinMode(MOSI, INPUT);
@@ -25,10 +24,10 @@ Gamepad::Gamepad(uint8_t MOSIpin, uint8_t MISOpin, uint8_t CSpin, uint8_t SCKpin
     digitalWrite(MISO, HIGH);
 }
 
-uint8_t Gamepad::transferByte(uint8_t cmd) {
-    uint8_t in = 0;
+u8 Gamepad::transferByte(u8 cmd) {
+    u8 in = 0;
 
-    for (uint8_t bit = 0; bit < 8; ++bit) {
+    for (u8 bit = 0; bit < 8; ++bit) {
         if (cmd & 0x01) {
             digitalWrite(MISO, HIGH);
         } else {
@@ -41,7 +40,7 @@ uint8_t Gamepad::transferByte(uint8_t cmd) {
         delayMicroseconds(10);
 
         if (digitalRead(MOSI) == HIGH) {
-            in |= static_cast<uint8_t>(1U << bit);
+            in |= static_cast<u8>(1U << bit);
         }
 
         digitalWrite(SCK, HIGH);
@@ -56,13 +55,13 @@ uint8_t Gamepad::transferByte(uint8_t cmd) {
 void Gamepad::ScanForInput() {
     digitalWrite(CS, LOW);
 
-    uint8_t rawBtnLow = 0xFF;
-    uint8_t rawBtnHigh = 0xFF;
+    u8 rawBtnLow = 0xFF;
+    u8 rawBtnHigh = 0xFF;
 
     // Fused 9-byte SPI pipeline
-    for (uint8_t byteIdx = 0; byteIdx < 9; ++byteIdx) {
-        uint8_t cmd = (byteIdx == 0) ? 0x01 : ((byteIdx == 1) ? 0x42 : 0x00);
-        uint8_t incoming = transferByte(cmd);
+    for (u8 byteIdx = 0; byteIdx < 9; ++byteIdx) {
+        u8 cmd = (byteIdx == 0) ? 0x01 : ((byteIdx == 1) ? 0x42 : 0x00);
+        u8 incoming = transferByte(cmd);
 
         switch (byteIdx) {
             // Bytes 0-2: Handshake & mode detection
@@ -80,7 +79,7 @@ void Gamepad::ScanForInput() {
                 break;
             case 4: {
                 rawBtnHigh = incoming;
-                uint16_t raw = static_cast<uint16_t>(rawBtnLow) | (static_cast<uint16_t>(rawBtnHigh) << 8);
+                u16 raw = static_cast<u16>(rawBtnLow) | (static_cast<u16>(rawBtnHigh) << 8);
                 buttonsDown = ~raw; // Invert active-LOW: 1 = pressed, 0 = released
                 break;
             }
@@ -104,11 +103,11 @@ void Gamepad::ScanForInput() {
     digitalWrite(CS, HIGH);
 }
 
-int16_t Gamepad::joystickData(GamepadAxis axis) const {
-    return joystickData(static_cast<uint8_t>(axis));
+i16 Gamepad::joystickData(GamepadAxis axis) const {
+    return joystickData(static_cast<u8>(axis));
 }
 
-int16_t Gamepad::joystickData(uint8_t axis) const {
+i16 Gamepad::joystickData(u8 axis) const {
     switch (axis) {
         case LX:
             return lx;
@@ -124,10 +123,10 @@ int16_t Gamepad::joystickData(uint8_t axis) const {
 }
 
 bool Gamepad::isButtonDown(GamepadButton button) const {
-    return isButtonDown(static_cast<uint8_t>(button));
+    return isButtonDown(static_cast<u8>(button));
 }
 
-bool Gamepad::isButtonDown(uint8_t button) const {
+bool Gamepad::isButtonDown(u8 button) const {
     if (button < 1 || button > 16) {
         return false;
     }
@@ -135,10 +134,10 @@ bool Gamepad::isButtonDown(uint8_t button) const {
 }
 
 bool Gamepad::buttonPressed(GamepadButton button) {
-    return buttonPressed(static_cast<uint8_t>(button));
+    return buttonPressed(static_cast<u8>(button));
 }
 
-bool Gamepad::buttonPressed(uint8_t button) {
+bool Gamepad::buttonPressed(u8 button) {
     if (button < 1 || button > 16) {
         return false;
     }
