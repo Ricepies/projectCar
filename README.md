@@ -81,6 +81,8 @@ projectCar/
 
 ## 🎮 Controls
 
+For an exhaustive line-by-line breakdown of the SPI polling protocol, button mask decoding, and differential joystick mixing, see the [Gamepad Controls Technical Guide](docs/GAMEPAD_CONTROL.md).
+
 | Controller Input | Action |
 | :--- | :--- |
 | **Start Button** | Arm / Disarm motors (audible high/low tone feedback) |
